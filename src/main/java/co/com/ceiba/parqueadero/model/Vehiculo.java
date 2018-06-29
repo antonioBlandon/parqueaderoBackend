@@ -59,5 +59,53 @@ public class Vehiculo extends ParentEntity {
 	public Long getDiasEnParqueadero() {
 		return diasEnParqueadero;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public Long getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public Long getFechaSalida() {
+		return fechaSalida;
+	}
+
+	public Long getValorPagado() {
+		return valorPagado;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+
+	public void setFechaIngreso(Long fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
+	public void setCilindraje(int cilindraje) {
+		this.cilindraje = cilindraje;
+	}
+
+	public void setFechaSalida(Long fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+
+	public void setValorPagado(Long valorPagado) {
+		this.valorPagado = valorPagado;
+	}
+
+	public void setDiasEnParqueadero(Long diasEnParqueadero) {
+		this.diasEnParqueadero = diasEnParqueadero;
+	}
+
+	public void setHorasEnParqueadero(Long horasEnParqueadero) {
+		this.horasEnParqueadero = horasEnParqueadero;
+	}
     
 }
