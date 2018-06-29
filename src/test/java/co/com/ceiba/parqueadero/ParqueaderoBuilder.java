@@ -12,6 +12,8 @@ public class ParqueaderoBuilder {
     private Long valorHoraCarro;
     private Long valorHoraMoto;
     private int topeCilindraje;
+    private int cantidadActualCarro;
+    private int cantidadActualMoto;
 
     public ParqueaderoBuilder() {
         this.adicionCilindraje = (long) 2000;
@@ -22,11 +24,13 @@ public class ParqueaderoBuilder {
         this.valorHoraCarro = (long) 1000;
         this.valorHoraMoto = (long) 500;
         this.topeCilindraje = 500;
+        this.cantidadActualCarro = 0;
+        this.cantidadActualMoto = 0;
     }
 
     public Parqueadero build(){
         return new Parqueadero( valorHoraCarro, valorHoraMoto, valorDiaCarro, valorDiaMoto,
-        		adicionCilindraje, topeCilindraje, topeCarros, topeMotos);
+        		adicionCilindraje, topeCilindraje, topeCarros, topeMotos, cantidadActualCarro, cantidadActualMoto);
     }
 
     public static ParqueaderoBuilder aParking(){

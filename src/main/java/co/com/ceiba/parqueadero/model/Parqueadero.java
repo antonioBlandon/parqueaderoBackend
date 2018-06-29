@@ -33,11 +33,18 @@ public class Parqueadero extends ParentEntity {
     
 	@Column(name = "tope_motos")
 	private Integer topeMotos;
+	
+	@Column(name = "cantidad_actual_carro")
+	private Integer cantidadActualCarro;
+    
+	@Column(name = "cantidad_actual_moto")
+	private Integer cantidadActualMoto;
     
     public Parqueadero() {}
-    
+
 	public Parqueadero(Long valorHoraCarros, Long valorHoraMotos, Long valorDiaCarro, Long valorDiaMoto,
-			Long adicionCilindraje, Integer topeCilindraje, Integer topeCarros, Integer topeMotos) {
+			Long adicionCilindraje, Integer topeCilindraje, Integer topeCarros, Integer topeMotos,
+			Integer cantidadActualCarro, Integer cantidadActualMoto) {
 		super();
 		this.valorHoraCarros = valorHoraCarros;
 		this.valorHoraMotos = valorHoraMotos;
@@ -47,6 +54,8 @@ public class Parqueadero extends ParentEntity {
 		this.topeCilindraje = topeCilindraje;
 		this.topeCarros = topeCarros;
 		this.topeMotos = topeMotos;
+		this.cantidadActualCarro = cantidadActualCarro;
+		this.cantidadActualMoto = cantidadActualMoto;
 	}
 
 	public Long getValorHoraCarros() {
@@ -111,6 +120,22 @@ public class Parqueadero extends ParentEntity {
 
 	public void setTopeMotos(Integer topeMotos) {
 		this.topeMotos = topeMotos;
+	}
+
+	public Integer getCantidadActualCarro() {
+		return cantidadActualCarro;
+	}
+
+	public Integer getCantidadActualMoto() {
+		return cantidadActualMoto;
+	}
+
+	public void setCantidadActualCarro(Integer cantidadActualCarro) {
+		this.cantidadActualCarro = cantidadActualCarro;
+	}
+
+	public void setCantidadActualMoto(Integer cantidadActualMoto) {
+		this.cantidadActualMoto = cantidadActualMoto;
 	}
 	
 }
