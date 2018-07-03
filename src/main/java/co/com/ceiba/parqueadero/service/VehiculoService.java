@@ -3,6 +3,8 @@ package co.com.ceiba.parqueadero.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+
 import co.com.ceiba.parqueadero.model.Vehiculo;
 
 public interface VehiculoService {
@@ -14,5 +16,8 @@ public interface VehiculoService {
 	List<Vehiculo> getVehicles();
 	
 	Optional<Vehiculo> getVehicleById(long vehicleId);
+	
+	@Query(value = "SELECT * FROM parqueaderodb.vehiculo WHERE fecha_salida IS NULL",nativeQuery = true)
+    List<Vehiculo> getvehiclesInParking();
 	
 }

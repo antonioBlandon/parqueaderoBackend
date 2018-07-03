@@ -39,4 +39,9 @@ public class VehiculoServiceImpl implements VehiculoService {
 		return optional;
 	}
 
+	@Override
+	public List<Vehiculo> getvehiclesInParking() {
+		return null;
+	}
+
 }

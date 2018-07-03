@@ -76,7 +76,7 @@ public class VigilanteController {
 				parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero);
 				this.vehiculoService.saveOrUpdate(vehiculo);
 				this.parqueaderoService.save(parqueadero);
-				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente");
+				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", vehiculo);
 			}else {
 				return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "La placa no existe o el vehiculo ya salio del parqueadero");
 			}
