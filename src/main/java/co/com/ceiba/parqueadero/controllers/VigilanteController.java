@@ -3,6 +3,7 @@ package co.com.ceiba.parqueadero.controllers;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.com.ceiba.parqueadero.domain.Vigilante;
 import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Vehiculo;
@@ -47,13 +49,71 @@ public class VigilanteController {
 		
 		String messageResult = validate(vehiculo, listVehicles, parqueadero);
 		if( messageResult == null) {
+			parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, true, parqueadero);
 			this.vehiculoService.saveOrUpdate(vehiculo);
+			this.parqueaderoService.save(parqueadero);
 			return new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente");
 		}else {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), messageResult);	
 		}
 		
 	}
+	
+	@CrossOrigin(origins="*")
+	@RequestMapping(value = "/outVehicle", method = RequestMethod.POST)
+	public RestResponse outVehicle(@RequestBody String vehicleJson) throws JsonParseException, JsonMappingException, IOException {
+		
+		this.mapper = new ObjectMapper();
+		
+		Parqueadero parqueadero = this.parqueaderoService.findById();
+		Vehiculo vehiculo = this.mapper.readValue(vehicleJson, Vehiculo.class);
+		
+		if(vehiculo != null) {
+			
+			Optional<Vehiculo> optionalVehicle = this.vehiculoService.getVehicleById(vehiculo.getId());
+			if( optionalVehicle.isPresent() ) {
+				vehiculo = calcularCobro(vehiculo, parqueadero);
+				parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero);
+				this.vehiculoService.saveOrUpdate(vehiculo);
+				this.parqueaderoService.save(parqueadero);
+				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente");
+			}else {
+				return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "La placa no existe o el vehiculo ya salio del parqueadero");
+			}
+			
+		}else {
+			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Error en el vehiculo seleccionado");	
+		}
+		
+	}
+	
+	public Parqueadero actualizarParqueadero(boolean isCar,boolean ingresaVehiculo, Parqueadero parqueadero) {
+		if(isCar) {
+			if(ingresaVehiculo) {
+				parqueadero.setCantidadActualCarro(parqueadero.getCantidadActualCarro() + 1);
+			}else {
+				parqueadero.setCantidadActualCarro(parqueadero.getCantidadActualCarro() - 1);
+			}
+		}else {
+			if(ingresaVehiculo) {
+				parqueadero.setCantidadActualMoto(parqueadero.getCantidadActualMoto() + 1 );
+			}else {
+				parqueadero.setCantidadActualMoto(parqueadero.getCantidadActualMoto() - 1 );
+			}
+		}
+		return parqueadero;
+	}
+	
+	public Vehiculo calcularCobro(Vehiculo vehiculo, Parqueadero parqueadero) {
+        Vigilante vigilante = VigilanteImpl.getInstance();
+        vehiculo.setFechaSalida(Calendar.getInstance().getTimeInMillis());
+        long tiempoParqueadero = vigilante.calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), vehiculo.getFechaSalida());
+        long[] diasHoras = vigilante.calcularDiasHoras(tiempoParqueadero);
+        vehiculo.setDiasEnParqueadero(diasHoras[0]);
+        vehiculo.setHorasEnParqueadero(diasHoras[1]);
+        vehiculo.setValorPagado(vigilante.cobrarParqueadero(vehiculo, parqueadero));
+        return vehiculo;
+    }
 	
 	String validate(Vehiculo vehiculo, List<Vehiculo> listVehicles, Parqueadero parqueadero) {
 		
