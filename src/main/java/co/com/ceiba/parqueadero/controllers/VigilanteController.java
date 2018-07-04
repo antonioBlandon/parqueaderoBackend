@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -42,7 +41,7 @@ public class VigilanteController {
 	
 	@CrossOrigin(origins="*")
 	@RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
-	public RestResponse addVehicle(@RequestBody String vehicleJson) throws JsonParseException, JsonMappingException, IOException {
+	public RestResponse addVehicle(@RequestBody String vehicleJson) throws JsonMappingException, IOException {
 		
 		this.mapper = new ObjectMapper();
 		
@@ -55,8 +54,7 @@ public class VigilanteController {
 			parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, true, parqueadero);
 			this.vehiculoRepository.save(vehiculo);
 			this.parqueaderoRepository.save(parqueadero);
-			RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente", vehiculo);
-			return restResponse;
+			return new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente", vehiculo);
 		}else {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), messageResult);	
 		}
@@ -65,7 +63,7 @@ public class VigilanteController {
 	
 	@CrossOrigin(origins="*")
 	@RequestMapping(value = "/outVehicle", method = RequestMethod.POST)
-	public RestResponse outVehicle(@RequestBody String vehicleJson) throws JsonParseException, JsonMappingException, IOException {
+	public RestResponse outVehicle(@RequestBody String vehicleJson) throws JsonMappingException, IOException {
 		
 		this.mapper = new ObjectMapper();
 		
@@ -82,8 +80,7 @@ public class VigilanteController {
 				vehiculo.setId(null);
 				this.registroRepository.save(registro);
 				this.parqueaderoRepository.save(parqueadero);
-				RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", registro);
-				return restResponse;
+				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", registro);
 			}else {
 				return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "La placa no existe o el vehiculo ya salio del parqueadero");
 			}
