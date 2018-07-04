@@ -1,12 +1,10 @@
 package co.com.ceiba.parqueadero.util;
 
-import co.com.ceiba.parqueadero.model.Vehiculo;
-
 public class RestResponse {
 	
 	private Integer responseCode;
 	private String message;
-	private Vehiculo vehiculo;
+	private Object objectReturn;
 	
 	public RestResponse(Integer responseCode) {
 		super();
@@ -19,11 +17,11 @@ public class RestResponse {
 		this.message = message;
 	}
 	
-	public RestResponse(Integer responseCode, String message, Vehiculo vehiculo) {
+	public RestResponse(Integer responseCode, String message, Object objectReturn) {
 		super();
 		this.responseCode = responseCode;
 		this.message = message;
-		this.vehiculo = vehiculo;
+		this.objectReturn = objectReturn;
 	}
 	
 	public Integer getResponseCode() {
@@ -39,12 +37,12 @@ public class RestResponse {
 		this.message = message;
 	}
 
-	public Vehiculo getVehiculo() {
-		return vehiculo;
+	public Object getObjectReturn() {
+		return objectReturn;
 	}
 
-	public void setVehiculo(Vehiculo vehiculo) {
-		this.vehiculo = vehiculo;
+	public void setVehiculo(Object objectReturn) {
+		this.objectReturn = objectReturn;
 	}
 
 }

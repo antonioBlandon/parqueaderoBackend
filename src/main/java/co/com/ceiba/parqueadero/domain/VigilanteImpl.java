@@ -3,7 +3,7 @@ package co.com.ceiba.parqueadero.domain;
 import java.util.Calendar;
 
 import co.com.ceiba.parqueadero.model.Parqueadero;
-import co.com.ceiba.parqueadero.model.Vehiculo;
+import co.com.ceiba.parqueadero.model.Registro;
 
 public class VigilanteImpl implements Vigilante {
 
@@ -60,18 +60,18 @@ public class VigilanteImpl implements Vigilante {
     }
 
     @Override
-    public long cobrarParqueadero(Vehiculo vehiculo, Parqueadero parqueadero) {
+    public long cobrarParqueadero(Registro registro, Parqueadero parqueadero) {
 
         long valor = 0;
-        if (vehiculo.getCilindraje() != 0) {
-            valor = (vehiculo.getDiasEnParqueadero() * parqueadero.getValorDiaMoto())
-                    + (vehiculo.getHorasEnParqueadero() * parqueadero.getValorHoraMotos());
-            if (vehiculo.getCilindraje() > parqueadero.getTopeCilindraje()) {
+        if (registro.getCilindraje() != 0) {
+            valor = (registro.getDiasEnParqueadero() * parqueadero.getValorDiaMoto())
+                    + (registro.getHorasEnParqueadero() * parqueadero.getValorHoraMotos());
+            if (registro.getCilindraje() > parqueadero.getTopeCilindraje()) {
                 valor = valor + parqueadero.getAdicionCilindraje();
             }
         } else {
-            valor = (vehiculo.getDiasEnParqueadero() * parqueadero.getValorDiaCarro())
-                    + (vehiculo.getHorasEnParqueadero() * parqueadero.getValorHoraCarros());
+            valor = (registro.getDiasEnParqueadero() * parqueadero.getValorDiaCarro())
+                    + (registro.getHorasEnParqueadero() * parqueadero.getValorHoraCarros());
         }
         return valor;
 

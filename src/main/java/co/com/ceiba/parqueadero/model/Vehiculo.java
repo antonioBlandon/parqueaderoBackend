@@ -22,42 +22,17 @@ public class Vehiculo extends ParentEntity {
 	@Column(name = "cilindraje", nullable = true, length = 10)
     private int cilindraje;
 	
-	@Column(name = "fecha_salida", nullable = false, length = 100)
-	private Long fechaSalida;
-	
-	@Column(name = "valor_pagado", nullable = false, length = 100)
-	private Long valorPagado;
-	
-	@Column(name = "dias_en_parqueadero", nullable = false, length = 100)
-	private Long diasEnParqueadero;
-	
-	@Column(name = "horas_en_parqueadero", nullable = false, length = 100)
-	private Long horasEnParqueadero;
-	
 	public Vehiculo() {}
 
-	public Vehiculo(String placa, Long fechaIngreso, int cilindraje, Long fechaSalida, Long valorPagado,
-			Long diasEnParqueadero, Long horasEnParqueadero) {
+	public Vehiculo(String placa, Long fechaIngreso, int cilindraje) {
 		super();
 		this.placa = placa;
 		this.fechaIngreso = fechaIngreso;
 		this.cilindraje = cilindraje;
-		this.fechaSalida = fechaSalida;
-		this.valorPagado = valorPagado;
-		this.diasEnParqueadero = diasEnParqueadero;
-		this.horasEnParqueadero = horasEnParqueadero;
 	}
 	
 	public int getCilindraje() {
 		return cilindraje;
-	}
-	
-	public Long getHorasEnParqueadero() {
-		return horasEnParqueadero;
-	}
-	
-	public Long getDiasEnParqueadero() {
-		return diasEnParqueadero;
 	}
 
 	public static long getSerialversionuid() {
@@ -72,14 +47,6 @@ public class Vehiculo extends ParentEntity {
 		return fechaIngreso;
 	}
 
-	public Long getFechaSalida() {
-		return fechaSalida;
-	}
-
-	public Long getValorPagado() {
-		return valorPagado;
-	}
-
 	public void setPlaca(String placa) {
 		this.placa = placa;
 	}
@@ -90,22 +57,6 @@ public class Vehiculo extends ParentEntity {
 
 	public void setCilindraje(int cilindraje) {
 		this.cilindraje = cilindraje;
-	}
-
-	public void setFechaSalida(Long fechaSalida) {
-		this.fechaSalida = fechaSalida;
-	}
-
-	public void setValorPagado(Long valorPagado) {
-		this.valorPagado = valorPagado;
-	}
-
-	public void setDiasEnParqueadero(Long diasEnParqueadero) {
-		this.diasEnParqueadero = diasEnParqueadero;
-	}
-
-	public void setHorasEnParqueadero(Long horasEnParqueadero) {
-		this.horasEnParqueadero = horasEnParqueadero;
 	}
     
 }

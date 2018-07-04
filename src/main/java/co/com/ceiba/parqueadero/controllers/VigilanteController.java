@@ -17,9 +17,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.com.ceiba.parqueadero.dao.RegistroRepository;
 import co.com.ceiba.parqueadero.domain.Vigilante;
 import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 import co.com.ceiba.parqueadero.model.Parqueadero;
+import co.com.ceiba.parqueadero.model.Registro;
 import co.com.ceiba.parqueadero.model.Vehiculo;
 import co.com.ceiba.parqueadero.service.ParqueaderoService;
 import co.com.ceiba.parqueadero.service.VehiculoService;
@@ -33,6 +35,9 @@ public class VigilanteController {
 	
 	@Autowired
 	protected VehiculoService vehiculoService;
+	
+	@Autowired
+	protected RegistroRepository registroRepository;
 	
 	protected ObjectMapper mapper;
 	
@@ -52,7 +57,8 @@ public class VigilanteController {
 			parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, true, parqueadero);
 			this.vehiculoService.saveOrUpdate(vehiculo);
 			this.parqueaderoService.save(parqueadero);
-			return new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente");
+			RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente", vehiculo);
+			return restResponse;
 		}else {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), messageResult);	
 		}
@@ -72,11 +78,14 @@ public class VigilanteController {
 			
 			Optional<Vehiculo> optionalVehicle = this.vehiculoService.getVehicleById(vehiculo.getId());
 			if( optionalVehicle.isPresent() ) {
-				vehiculo = calcularCobro(vehiculo, parqueadero);
+				Registro registro = calcularCobro(vehiculo, parqueadero);
 				parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero);
-				this.vehiculoService.saveOrUpdate(vehiculo);
+				this.vehiculoService.deleteVehiculo(vehiculo.getId());
+				vehiculo.setId(null);
+				this.registroRepository.save(registro);
 				this.parqueaderoService.save(parqueadero);
-				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", vehiculo);
+				RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", registro);
+				return restResponse;
 			}else {
 				return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "La placa no existe o el vehiculo ya salio del parqueadero");
 			}
@@ -104,15 +113,16 @@ public class VigilanteController {
 		return parqueadero;
 	}
 	
-	public Vehiculo calcularCobro(Vehiculo vehiculo, Parqueadero parqueadero) {
+	public Registro calcularCobro(Vehiculo vehiculo, Parqueadero parqueadero) {
         Vigilante vigilante = VigilanteImpl.getInstance();
-        vehiculo.setFechaSalida(Calendar.getInstance().getTimeInMillis());
-        long tiempoParqueadero = vigilante.calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), vehiculo.getFechaSalida());
+        Registro registro = new Registro(vehiculo.getPlaca(), vehiculo.getFechaIngreso(), vehiculo.getCilindraje());
+        registro.setFechaSalida(Calendar.getInstance().getTimeInMillis());
+        long tiempoParqueadero = vigilante.calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), registro.getFechaSalida());
         long[] diasHoras = vigilante.calcularDiasHoras(tiempoParqueadero);
-        vehiculo.setDiasEnParqueadero(diasHoras[0]);
-        vehiculo.setHorasEnParqueadero(diasHoras[1]);
-        vehiculo.setValorPagado(vigilante.cobrarParqueadero(vehiculo, parqueadero));
-        return vehiculo;
+        registro.setDiasEnParqueadero(diasHoras[0]);
+        registro.setHorasEnParqueadero(diasHoras[1]);
+        registro.setValorPagado(vigilante.cobrarParqueadero(registro, parqueadero));
+        return registro;
     }
 	
 	String validate(Vehiculo vehiculo, List<Vehiculo> listVehicles, Parqueadero parqueadero) {

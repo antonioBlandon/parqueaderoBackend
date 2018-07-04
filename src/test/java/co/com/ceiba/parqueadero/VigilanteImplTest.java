@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import co.com.ceiba.parqueadero.model.Parqueadero;
+import co.com.ceiba.parqueadero.model.Registro;
 import co.com.ceiba.parqueadero.model.Vehiculo;
 import co.com.ceiba.parqueadero.domain.Vigilante;
 import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 
 import static co.com.ceiba.parqueadero.ParqueaderoBuilder.aParking;
 import static co.com.ceiba.parqueadero.VehiculoBuilder.aVehicle;
+import static co.com.ceiba.parqueadero.RegistroBuilder.aRegister;
 
 public class VigilanteImplTest {
 
@@ -94,9 +96,9 @@ public class VigilanteImplTest {
     @Test
     public void testCalcularTiempoVehiculoParqueadero() {
         //Arrange
-        Vehiculo vehiculo = aVehicle().build();
+        Registro registro = aRegister().build();
         //Act
-        long horasEnParqueadero = vigilante.calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), vehiculo.getFechaSalida());
+        long horasEnParqueadero = vigilante.calcularTiempoVehiculoParqueadero(registro.getFechaIngreso(), registro.getFechaSalida());
         //Assert
         Assert.assertEquals(27, horasEnParqueadero);
     }
@@ -105,11 +107,11 @@ public class VigilanteImplTest {
     @Test
     public void testCobrarParqueaderoCarro() {
         //Arrange
-        Vehiculo vehiculo = aVehicle()
+        Registro registro = aRegister()
                 .withTiempoEnParqueadero(3, 1).build();
         Parqueadero parqueadero = aParking().build();
         //Act
-        long cobro = vigilante.cobrarParqueadero(vehiculo, parqueadero);
+        long cobro = vigilante.cobrarParqueadero(registro, parqueadero);
         //Assert
         Assert.assertEquals(11000, cobro);
     }
@@ -118,13 +120,13 @@ public class VigilanteImplTest {
     @Test
     public void testCobrarParqueaderoMotoConAltoCilindraje() {
         //Arrange
-        Vehiculo vehiculo = aVehicle()
+    	Registro registro = aRegister()
                 .withFechaDeSalida(1389934000) //Fri Jan 16 1970 21:05:34 GMT-0500
                 .withTiempoEnParqueadero(0, 1)
                 .buildMotoWithAltoCilindraje().build();
         Parqueadero parqueadero = aParking().build();
         //Act
-        long cobro = vigilante.cobrarParqueadero(vehiculo, parqueadero);
+        long cobro = vigilante.cobrarParqueadero(registro, parqueadero);
         //Assert
         Assert.assertEquals(6000, cobro);
     }
@@ -133,14 +135,14 @@ public class VigilanteImplTest {
     @Test
     public void testCobrarParqueaderoMotoConBajoCilindraje() {
         //Arrange
-        Vehiculo vehiculo = aVehicle()
+    	Registro registro = aRegister()
                 .withFechaDeSalida(1389934000) //Fri Jan 16 1970 21:05:34 GMT-0500
                 .withTiempoEnParqueadero(0, 1)
                 .buildMotoWithBajoCilindraje().build();
         Parqueadero parqueadero = aParking().build();
         //Act
-        System.out.println(vehiculo.toString());
-        long cobro = vigilante.cobrarParqueadero(vehiculo, parqueadero);
+        System.out.println(registro.toString());
+        long cobro = vigilante.cobrarParqueadero(registro, parqueadero);
         //Assert
         Assert.assertEquals(4000, cobro);
     }

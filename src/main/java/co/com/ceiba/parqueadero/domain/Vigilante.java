@@ -1,7 +1,7 @@
 package co.com.ceiba.parqueadero.domain;
 
 import co.com.ceiba.parqueadero.model.Parqueadero;
-import co.com.ceiba.parqueadero.model.Vehiculo;
+import co.com.ceiba.parqueadero.model.Registro;
 
 public interface Vigilante {
 
@@ -13,7 +13,7 @@ public interface Vigilante {
 
     long calcularTiempoVehiculoParqueadero(long fechaIngreso, long fechaSalida);
 
-    long cobrarParqueadero(Vehiculo vehiculo, Parqueadero parqueadero);
+    long cobrarParqueadero(Registro vehiculo, Parqueadero parqueadero);
 
     long[] calcularDiasHoras(long horas);
 
