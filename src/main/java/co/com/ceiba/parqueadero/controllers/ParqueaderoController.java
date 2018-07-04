@@ -14,15 +14,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.com.ceiba.parqueadero.dao.ParqueaderoRepository;
 import co.com.ceiba.parqueadero.model.Parqueadero;
-import co.com.ceiba.parqueadero.service.ParqueaderoService;
 import co.com.ceiba.parqueadero.util.RestResponse;
 
 @RestController
 public class ParqueaderoController {
 	
 	@Autowired
-	protected ParqueaderoService parqueaderoService;
+	protected ParqueaderoRepository parqueaderoRepository;
+	
 	protected ObjectMapper mapper;
 	
 	@CrossOrigin(origins="*")
@@ -35,14 +36,14 @@ public class ParqueaderoController {
 		if(!this.validate(parqueadero)) {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "El camop obligatorio no fue diligenciado");
 		}
-		this.parqueaderoService.save(parqueadero);
+		this.parqueaderoRepository.save(parqueadero);
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}
 	
 	@CrossOrigin(origins="*")
 	@RequestMapping(value = "/getDataParking", method = RequestMethod.GET)
 	public Parqueadero getDataParking() {
-		return this.parqueaderoService.findById();
+		return this.parqueaderoRepository.findById((long)1).get();
 	}
 	
 	private boolean validate ( Parqueadero parqueadero) {

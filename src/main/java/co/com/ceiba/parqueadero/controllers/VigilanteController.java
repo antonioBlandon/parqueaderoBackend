@@ -2,7 +2,6 @@ package co.com.ceiba.parqueadero.controllers;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +16,24 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.com.ceiba.parqueadero.dao.ParqueaderoRepository;
 import co.com.ceiba.parqueadero.dao.RegistroRepository;
+import co.com.ceiba.parqueadero.dao.VehiculoRepository;
 import co.com.ceiba.parqueadero.domain.Vigilante;
 import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Registro;
 import co.com.ceiba.parqueadero.model.Vehiculo;
-import co.com.ceiba.parqueadero.service.ParqueaderoService;
-import co.com.ceiba.parqueadero.service.VehiculoService;
 import co.com.ceiba.parqueadero.util.RestResponse;
 
 @RestController
 public class VigilanteController {
 	
 	@Autowired
-	protected ParqueaderoService parqueaderoService;
+	protected ParqueaderoRepository parqueaderoRepository;
 	
 	@Autowired
-	protected VehiculoService vehiculoService;
+	protected VehiculoRepository vehiculoRepository;
 	
 	@Autowired
 	protected RegistroRepository registroRepository;
@@ -49,14 +48,13 @@ public class VigilanteController {
 		
 		Vehiculo vehiculo = this.mapper.readValue(vehicleJson, Vehiculo.class);
 		vehiculo.setFechaIngreso(Calendar.getInstance().getTimeInMillis());
-		Parqueadero parqueadero = this.parqueaderoService.findById();
-		List<Vehiculo> listVehicles = this.vehiculoService.getVehicles();
+		Parqueadero parqueadero = this.parqueaderoRepository.findById((long) 1).get();
 		
-		String messageResult = validate(vehiculo, listVehicles, parqueadero);
+		String messageResult = validate(vehiculo, parqueadero);
 		if( messageResult == null) {
 			parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, true, parqueadero);
-			this.vehiculoService.saveOrUpdate(vehiculo);
-			this.parqueaderoService.save(parqueadero);
+			this.vehiculoRepository.save(vehiculo);
+			this.parqueaderoRepository.save(parqueadero);
 			RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente", vehiculo);
 			return restResponse;
 		}else {
@@ -71,19 +69,19 @@ public class VigilanteController {
 		
 		this.mapper = new ObjectMapper();
 		
-		Parqueadero parqueadero = this.parqueaderoService.findById();
+		Parqueadero parqueadero = this.parqueaderoRepository.findById((long) 1).get();
 		Vehiculo vehiculo = this.mapper.readValue(vehicleJson, Vehiculo.class);
 		
 		if(vehiculo != null) {
 			
-			Optional<Vehiculo> optionalVehicle = this.vehiculoService.getVehicleById(vehiculo.getId());
+			Optional<Vehiculo> optionalVehicle = this.vehiculoRepository.findById(vehiculo.getId());
 			if( optionalVehicle.isPresent() ) {
 				Registro registro = calcularCobro(vehiculo, parqueadero);
 				parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero);
-				this.vehiculoService.deleteVehiculo(vehiculo.getId());
+				this.vehiculoRepository.deleteById(vehiculo.getId());
 				vehiculo.setId(null);
 				this.registroRepository.save(registro);
-				this.parqueaderoService.save(parqueadero);
+				this.parqueaderoRepository.save(parqueadero);
 				RestResponse restResponse = new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", registro);
 				return restResponse;
 			}else {
@@ -125,11 +123,11 @@ public class VigilanteController {
         return registro;
     }
 	
-	String validate(Vehiculo vehiculo, List<Vehiculo> listVehicles, Parqueadero parqueadero) {
+	String validate(Vehiculo vehiculo, Parqueadero parqueadero) {
 		
 		if(!VigilanteImpl.getInstance().validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso())) {
 			return "La placa que esta intentando ingresar no es valida";
-		}else if (!validarPlacaExiste(listVehicles, vehiculo)) {
+		}else if (this.vehiculoRepository.findByPlaca(vehiculo.getPlaca()).isPresent()) {
 			return "Existe un vehiculo con la misma placa dentro del parqueadero";
 		}else if (!validarCupo(vehiculo, parqueadero)){
 			return "No hay cupo para el vehiculo. Intente mas tarde por favor";
@@ -144,14 +142,5 @@ public class VigilanteController {
 			return VigilanteImpl.getInstance().validarCantidadMotos(parqueadero.getCantidadActualMoto());
 		}
 	}
-	
-	public boolean validarPlacaExiste(List<Vehiculo> listVehiculo, Vehiculo newVehicle) {
-        for (Vehiculo vehiculoItem : listVehiculo) {
-            if (vehiculoItem.getPlaca().contains(newVehicle.getPlaca())) {
-                return false;
-            }
-        }
-        return true;
-    }
 
 }
