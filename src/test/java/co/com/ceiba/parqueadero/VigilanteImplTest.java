@@ -30,7 +30,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
         //Assert
-        Assert.assertEquals(true, puedeIngresar);
+        Assert.assertTrue(puedeIngresar);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
         //Assert
-        Assert.assertEquals(false, puedeIngresar);
+        Assert.assertFalse(puedeIngresar);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
         //Assert
-        Assert.assertEquals(true, puedeIngresar);
+        Assert.assertTrue(puedeIngresar);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
         //Assert
-        Assert.assertEquals(false, puedeIngresar);
+        Assert.assertFalse(puedeIngresar);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso());
         //Assert
-        Assert.assertEquals(true, puedeIngresar);
+        Assert.assertTrue(puedeIngresar);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso());
         //Assert
-        Assert.assertEquals(true, puedeIngresar);
+        Assert.assertTrue(puedeIngresar);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class VigilanteImplTest {
         //Act
         boolean puedeIngresar = vigilante.validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso());
         //Assert
-        Assert.assertEquals(false, puedeIngresar);
+        Assert.assertFalse(puedeIngresar);
     }
 
     @Test

@@ -27,7 +27,7 @@ public class VigilanteImpl implements Vigilante {
 	@Autowired
 	protected RegistroRepository registroRepository;
 	
-	private long UNIQUE_ID_PARKING = 1;
+	private static final long UNIQUE_ID_PARKING = 1;
 
     private VigilanteImpl() {
     }
@@ -63,7 +63,7 @@ public class VigilanteImpl implements Vigilante {
     @Override
     public boolean validarPlaca(String placa, long fechaIngreso) {
 
-        String INIT_LETTER_RESTRICTION = "A";
+        final String INIT_LETTER_RESTRICTION = "A";
     	String primeraLetra = placa.substring(0, 1);
     	
         if (primeraLetra.equals(INIT_LETTER_RESTRICTION)) {
@@ -84,7 +84,7 @@ public class VigilanteImpl implements Vigilante {
 
     @Override
     public long calcularTiempoVehiculoParqueadero(long fechaIngreso, long fechaSalida) {
-    	int SECONDS_IN_HOUR = 3600;
+    	final int SECONDS_IN_HOUR = 3600;
         long tiempo = fechaSalida - fechaIngreso;
         double tiempoEnSegundos = (float) tiempo / 1_000;
         return (Double.valueOf(Math.ceil(tiempoEnSegundos / SECONDS_IN_HOUR))).longValue();
@@ -111,8 +111,8 @@ public class VigilanteImpl implements Vigilante {
     @Override
     public long[] calcularDiasHoras(long horas) {
     	
-    	int MAX_HOURS_TO_DAY = 9;
-    	int HOURS_IN_ONE_DAY = 24;
+    	final int MAX_HOURS_TO_DAY = 9;
+    	final int HOURS_IN_ONE_DAY = 24;
         long dias = 0;
         long[] diasHoras = new long[2];
         
