@@ -2,19 +2,13 @@ package co.com.ceiba.parqueadero.domain;
 
 import java.util.Calendar;
 
+import org.springframework.stereotype.Service;
+
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Registro;
 
+@Service
 public class VigilanteImpl implements Vigilante {
-
-    static VigilanteImpl reference;
-
-    public static VigilanteImpl getInstance() {
-        if (reference == null) {
-            reference = new VigilanteImpl();
-        }
-        return reference;
-    }
 
     private VigilanteImpl() {
     }

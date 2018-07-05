@@ -1,27 +1,27 @@
 package co.com.ceiba.parqueadero;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Registro;
 import co.com.ceiba.parqueadero.model.Vehiculo;
 import co.com.ceiba.parqueadero.domain.Vigilante;
-import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 
 import static co.com.ceiba.parqueadero.ParqueaderoBuilder.aParking;
 import static co.com.ceiba.parqueadero.VehiculoBuilder.aVehicle;
 import static co.com.ceiba.parqueadero.RegistroBuilder.aRegister;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class VigilanteImplTest {
 
+    @Autowired
     private Vigilante vigilante;
-
-    @Before
-    public void preparaData() {
-        vigilante = VigilanteImpl.getInstance();
-    }
 
     @Test
     public void testValidarCantidadCarrosMenor() {

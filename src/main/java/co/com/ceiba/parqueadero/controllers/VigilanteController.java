@@ -19,7 +19,6 @@ import co.com.ceiba.parqueadero.dao.ParqueaderoRepository;
 import co.com.ceiba.parqueadero.dao.RegistroRepository;
 import co.com.ceiba.parqueadero.dao.VehiculoRepository;
 import co.com.ceiba.parqueadero.domain.Vigilante;
-import co.com.ceiba.parqueadero.domain.VigilanteImpl;
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Registro;
 import co.com.ceiba.parqueadero.model.Vehiculo;
@@ -36,6 +35,9 @@ public class VigilanteController {
 	
 	@Autowired
 	protected RegistroRepository registroRepository;
+	
+	@Autowired
+	protected Vigilante vigilante;
 	
 	protected ObjectMapper mapper;
 	
@@ -109,7 +111,6 @@ public class VigilanteController {
 	}
 	
 	public Registro calcularCobro(Vehiculo vehiculo, Parqueadero parqueadero) {
-        Vigilante vigilante = VigilanteImpl.getInstance();
         Registro registro = new Registro(vehiculo.getPlaca(), vehiculo.getFechaIngreso(), vehiculo.getCilindraje());
         registro.setFechaSalida(Calendar.getInstance().getTimeInMillis());
         long tiempoParqueadero = vigilante.calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), registro.getFechaSalida());
@@ -122,7 +123,7 @@ public class VigilanteController {
 	
 	String validate(Vehiculo vehiculo, Parqueadero parqueadero) {
 		
-		if(!VigilanteImpl.getInstance().validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso())) {
+		if(!vigilante.validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso())) {
 			return "La placa que esta intentando ingresar no es valida";
 		}else if (this.vehiculoRepository.findByPlaca(vehiculo.getPlaca()).isPresent()) {
 			return "Existe un vehiculo con la misma placa dentro del parqueadero";
@@ -134,9 +135,9 @@ public class VigilanteController {
 	
 	public boolean validarCupo(Vehiculo vehiculo, Parqueadero parqueadero) {
 		if (vehiculo.getCilindraje() == 0) {
-			return VigilanteImpl.getInstance().validarCantidadCarros(parqueadero.getCantidadActualCarro());
+			return vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro());
 		}else {
-			return VigilanteImpl.getInstance().validarCantidadMotos(parqueadero.getCantidadActualMoto());
+			return vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto());
 		}
 	}
 
