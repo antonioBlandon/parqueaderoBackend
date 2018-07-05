@@ -2,6 +2,8 @@ package co.com.ceiba.parqueadero.domain;
 
 import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Registro;
+import co.com.ceiba.parqueadero.model.Vehiculo;
+import co.com.ceiba.parqueadero.util.RestResponse;
 
 /**
  * @author jose.blandon
@@ -9,24 +11,43 @@ import co.com.ceiba.parqueadero.model.Registro;
  * Se declaran los metodos del dominio*/
 
 public interface Vigilante {
+	
+	/**
+	 * Si se cumplen todas las validaciones se ingresa el vehiculo al parqueadero
+	 * 
+	 * @param vehiculo, vehiculo que se va ingresar al parqueadero, debe tener cilindraje y placa
+	 * 
+	 * @return Restresponse, para indicar al controlador que debe retornar*/
+	RestResponse addVehicle(Vehiculo vehiculo);
+	
+	/**
+	 * Se realizan los calculos de la estadía del vehículo en el parqueadero y por ultimo saca el vehiculo
+	 * del parqueadero
+	 * 
+	 * @param id, identificador del vehiculo que se desea sacar del parqueadero
+	 * 
+	 * @return Restresponse, para indicar al controlador que debe retornar*/
+	RestResponse outVehicle(Long id);
 
 	/**
 	 * Valida que el parqueadero aun tenga cupos para carros
 	 * 
 	 * @param cantidadCarrosActual, entero con la cantidad de carros que tiene el parqueadero
+	 * @param topeCarros, maximo de carros que recibe el parqueadero
 	 * 
 	 * @return boolean, true si hay cupo y false en caso contrario
 	 */
-    boolean validarCantidadCarros(int cantidadCarrosActual);
+    boolean validarCantidadCarros(int cantidadCarrosActual, int topeCarros);
 
     /**
 	 * Valida que el parqueadero aun tenga cupos para motos
 	 * 
 	 * @param cantidadMotosActual, entero con la cantidad de motos que tiene el parqueadero
+	 * @param topeMotos, maximo de motos que recibe el parqueadero
 	 * 
 	 * @return boolean, true si hay cupo y false en caso contrario
 	 */
-    boolean validarCantidadMotos(int cantidadMotosActual);
+    boolean validarCantidadMotos(int cantidadMotosActual, int topeMotos);
 
     /**
      *Valida mediante la placa del vehiculo, si este puede ingresar o no. Las placas que inician por la letra "A" solo pueden ingresar 

@@ -31,40 +31,15 @@ public class ParqueaderoController {
 		throws JsonMappingException, IOException {
 		
 		this.mapper = new ObjectMapper();
-		Parqueadero parqueadero = this.mapper.readValue(userJson, Parqueadero.class);
-		if(!this.validate(parqueadero)) {
-			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "El camop obligatorio no fue diligenciado");
-		}
-		this.parqueaderoRepository.save(parqueadero);
+		this.parqueaderoRepository.save(this.mapper.readValue(userJson, Parqueadero.class));
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
+		
 	}
 	
 	@CrossOrigin(origins="*")
 	@RequestMapping(value = "/getDataParking", method = RequestMethod.GET)
 	public Parqueadero getDataParking() {
 		return this.parqueaderoRepository.findById((long)1).get();
-	}
-	
-	private boolean validate ( Parqueadero parqueadero) {
-		if (parqueadero.getAdicionCilindraje() == null) {
-			return false;
-		}else if (parqueadero.getTopeCarros() == null) {
-			return false;
-		}else if (parqueadero.getTopeCilindraje() == null) {
-			return false;
-		}else if (parqueadero.getTopeMotos() == null) {
-			return false;
-		}else if (parqueadero.getValorDiaCarro() == null) {
-			return false;
-		}else if (parqueadero.getValorDiaMoto() == null) {
-			return false;
-		}else if (parqueadero.getValorHoraCarros() == null) {
-			return false;
-		}else if (parqueadero.getValorHoraMotos() == null) {
-			return false;
-		}else {
-			return true;
-		}
 	}
 
 }

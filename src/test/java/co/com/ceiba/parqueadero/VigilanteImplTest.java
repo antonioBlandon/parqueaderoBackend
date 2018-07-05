@@ -26,9 +26,9 @@ public class VigilanteImplTest {
     @Test
     public void testValidarCantidadCarrosMenor() {
         //Arrange
-        int cantidadCarros = 19;
+    	Parqueadero parqueadero = aParking().buildParkingWithCars().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadCarros(cantidadCarros);
+        boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
         //Assert
         Assert.assertEquals(true, puedeIngresar);
     }
@@ -36,9 +36,9 @@ public class VigilanteImplTest {
     @Test
     public void testValidarCantidadCarrosMayor() {
         //Arrange
-        int cantidadCarros = 20;
+        Parqueadero parqueadero = aParking().buildParkingWithLimitCars().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadCarros(cantidadCarros);
+        boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
         //Assert
         Assert.assertEquals(false, puedeIngresar);
     }
@@ -46,9 +46,9 @@ public class VigilanteImplTest {
     @Test
     public void testValidarCantidadMotosMenor() {
         //Arrange
-        int cantidadMotos = 9;
+    	Parqueadero parqueadero = aParking().buildParkingWithMoto().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadMotos(cantidadMotos);
+        boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
         //Assert
         Assert.assertEquals(true, puedeIngresar);
     }
@@ -56,9 +56,9 @@ public class VigilanteImplTest {
     @Test
     public void testValidarCantidadMotosMayor() {
         //Arrange
-        int cantidadMotos = 10;
+    	Parqueadero parqueadero = aParking().buildParkingWithLimitMoto().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadMotos(cantidadMotos);
+        boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
         //Assert
         Assert.assertEquals(false, puedeIngresar);
     }

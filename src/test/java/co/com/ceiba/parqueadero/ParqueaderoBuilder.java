@@ -32,6 +32,26 @@ public class ParqueaderoBuilder {
         return new Parqueadero( valorHoraCarro, valorHoraMoto, valorDiaCarro, valorDiaMoto,
         		adicionCilindraje, topeCilindraje, topeCarros, topeMotos, cantidadActualCarro, cantidadActualMoto);
     }
+    
+    public ParqueaderoBuilder buildParkingWithLimitCars(){
+        this.cantidadActualCarro = 20;
+        return this;
+    }
+    
+    public ParqueaderoBuilder buildParkingWithCars(){
+        this.cantidadActualCarro = 19;
+        return this;
+    }
+    
+    public ParqueaderoBuilder buildParkingWithLimitMoto(){
+        this.cantidadActualMoto = 10;
+        return this;
+    }
+    
+    public ParqueaderoBuilder buildParkingWithMoto(){
+        this.cantidadActualMoto = 9;
+        return this;
+    }
 
     public static ParqueaderoBuilder aParking(){
         return new ParqueaderoBuilder();
