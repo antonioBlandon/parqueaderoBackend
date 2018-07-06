@@ -67,10 +67,6 @@ public class Registro extends ParentEntity {
 		return diasEnParqueadero;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getPlaca() {
 		return placa;
 	}
@@ -85,18 +81,6 @@ public class Registro extends ParentEntity {
 
 	public Long getValorPagado() {
 		return valorPagado;
-	}
-
-	public void setPlaca(String placa) {
-		this.placa = placa;
-	}
-
-	public void setFechaIngreso(Long fechaIngreso) {
-		this.fechaIngreso = fechaIngreso;
-	}
-
-	public void setCilindraje(int cilindraje) {
-		this.cilindraje = cilindraje;
 	}
 
 	public void setFechaSalida(Long fechaSalida) {

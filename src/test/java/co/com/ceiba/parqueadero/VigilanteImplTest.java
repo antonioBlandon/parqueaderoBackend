@@ -28,7 +28,7 @@ public class VigilanteImplTest {
         //Arrange
     	Parqueadero parqueadero = aParking().buildParkingWithCars().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
+        boolean puedeIngresar = vigilante.validarCupo(true, parqueadero);
         //Assert
         Assert.assertTrue(puedeIngresar);
     }
@@ -38,7 +38,7 @@ public class VigilanteImplTest {
         //Arrange
         Parqueadero parqueadero = aParking().buildParkingWithLimitCars().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
+        boolean puedeIngresar = vigilante.validarCupo(true, parqueadero);
         //Assert
         Assert.assertFalse(puedeIngresar);
     }
@@ -48,7 +48,7 @@ public class VigilanteImplTest {
         //Arrange
     	Parqueadero parqueadero = aParking().buildParkingWithMoto().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
+        boolean puedeIngresar = vigilante.validarCupo(false, parqueadero);
         //Assert
         Assert.assertTrue(puedeIngresar);
     }
@@ -58,7 +58,7 @@ public class VigilanteImplTest {
         //Arrange
     	Parqueadero parqueadero = aParking().buildParkingWithLimitMoto().build();
         //Act
-        boolean puedeIngresar = vigilante.validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
+        boolean puedeIngresar = vigilante.validarCupo(false, parqueadero);
         //Assert
         Assert.assertFalse(puedeIngresar);
     }
@@ -155,6 +155,57 @@ public class VigilanteImplTest {
         long[] diasHoras = vigilante.calcularDiasHoras(horas);
         //Assert
         Assert.assertArrayEquals(new long[]{2, 0}, diasHoras);
+    }
+    
+    @Test
+    public void testCrearRegistro() {
+    	//Arrange
+    	Parqueadero parqueadero = aParking().build();
+    	Vehiculo vehiculo = aVehicle().build();
+    	//Act
+    	Registro registro = vigilante.crearRegistro(vehiculo, parqueadero);
+    	//Assert
+    	Assert.assertNotNull(registro);
+    }
+    
+    @Test
+    public void testActualizarParqueaderoIngresaCarro() {
+    	//Arrange
+    	Parqueadero parqueadero = aParking().build();
+    	//Act
+    	Parqueadero parqueaderoActualizado = vigilante.actualizarParqueadero(true, true, parqueadero);
+    	//Assert
+    	Assert.assertTrue(parqueaderoActualizado.getCantidadActualCarro() == 1);
+    }
+    
+    @Test
+    public void testActualizarParqueaderoSaleCarro() {
+    	//Arrange
+    	Parqueadero parqueadero = aParking().buildParkingWithCars().build();
+    	//Act
+    	Parqueadero parqueaderoActualizado = vigilante.actualizarParqueadero(true, false, parqueadero);
+    	//Assert
+    	Assert.assertTrue(parqueaderoActualizado.getCantidadActualCarro() == 18);
+    }
+    
+    @Test
+    public void testActualizarParqueaderoIngresaMoto() {
+    	//Arrange
+    	Parqueadero parqueadero = aParking().build();
+    	//Act
+    	Parqueadero parqueaderoActualizado = vigilante.actualizarParqueadero(false, true, parqueadero);
+    	//Assert
+    	Assert.assertTrue(parqueaderoActualizado.getCantidadActualMoto() == 1);
+    }
+    
+    @Test
+    public void testActualizarParqueaderoSaleMoto() {
+    	//Arrange
+    	Parqueadero parqueadero = aParking().buildParkingWithMoto().build();
+    	//Act
+    	Parqueadero parqueaderoActualizado = vigilante.actualizarParqueadero(false, false, parqueadero);
+    	//Assert
+    	Assert.assertTrue(parqueaderoActualizado.getCantidadActualMoto() == 8);
     }
 
 }

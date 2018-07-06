@@ -22,16 +22,6 @@ public class RegistroBuilder {
         valorPagado = (long) 11000;
     }
 
-    public RegistroBuilder withPlacaWithoutAinit(String placa){
-        this.placa = placa;
-        return this;
-    }
-
-    public RegistroBuilder withFechaValida(long fechaIngreso){
-        this.fechaIngreso = fechaIngreso;
-        return this;
-    }
-
     public RegistroBuilder withFechaDeSalida(long fechaSalida){
         this.fechaSalida = fechaSalida;
         return this;

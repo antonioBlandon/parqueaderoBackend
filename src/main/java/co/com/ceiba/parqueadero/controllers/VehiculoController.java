@@ -22,7 +22,7 @@ public class VehiculoController {
 	@RequestMapping(value = "/getAllVehicles", method = RequestMethod.GET)
 	public List<Vehiculo> getAllVehicles() {
 		List<Vehiculo> listVehicles = new ArrayList<>();
-		vehiculoRepository.findAll().forEach(e -> listVehicles.add(e));
+		vehiculoRepository.findAll().forEach(listVehicles::add);
 		return listVehicles;
 	}
 

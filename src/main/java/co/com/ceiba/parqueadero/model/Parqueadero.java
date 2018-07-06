@@ -90,38 +90,6 @@ public class Parqueadero extends ParentEntity {
 		return topeMotos;
 	}
 
-	public void setValorHoraCarros(Long valorHoraCarros) {
-		this.valorHoraCarros = valorHoraCarros;
-	}
-
-	public void setValorHoraMotos(Long valorHoraMotos) {
-		this.valorHoraMotos = valorHoraMotos;
-	}
-
-	public void setValorDiaCarro(Long valorDiaCarro) {
-		this.valorDiaCarro = valorDiaCarro;
-	}
-
-	public void setValorDiaMoto(Long valorDiaMoto) {
-		this.valorDiaMoto = valorDiaMoto;
-	}
-
-	public void setAdicionCilindraje(Long adicionCilindraje) {
-		this.adicionCilindraje = adicionCilindraje;
-	}
-
-	public void setTopeCilindraje(Integer topeCilindraje) {
-		this.topeCilindraje = topeCilindraje;
-	}
-
-	public void setTopeCarros(Integer topeCarros) {
-		this.topeCarros = topeCarros;
-	}
-
-	public void setTopeMotos(Integer topeMotos) {
-		this.topeMotos = topeMotos;
-	}
-
 	public Integer getCantidadActualCarro() {
 		return cantidadActualCarro;
 	}

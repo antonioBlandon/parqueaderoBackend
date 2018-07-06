@@ -24,16 +24,6 @@ public class VehiculoBuilder {
         return this;
     }
 
-    public VehiculoBuilder buildMotoWithAltoCilindraje(){
-        this.cilindraje = 650;
-        return this;
-    }
-
-    public VehiculoBuilder buildMotoWithBajoCilindraje(){
-        this.cilindraje = 250;
-        return this;
-    }
-
     public Vehiculo build(){
         return new Vehiculo(placa, fechaIngreso, cilindraje);
     }

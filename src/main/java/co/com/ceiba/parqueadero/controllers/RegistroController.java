@@ -22,7 +22,7 @@ public class RegistroController {
 	@RequestMapping(value = "/getAllRegisters", method = RequestMethod.GET)
 	public List<Registro> getAllVehicles() {
 		List<Registro> listRegister = new ArrayList<>();
-		registroRepository.findAll().forEach(e -> listRegister.add(e));
+		registroRepository.findAll().forEach(listRegister::add);
 		return listRegister;
 	}
 

@@ -37,28 +37,22 @@ public class VigilanteImpl implements Vigilante {
     	
     	vehiculo.setFechaIngreso(Calendar.getInstance().getTimeInMillis());
 		Parqueadero parqueadero = this.parqueaderoRepository.findById(UNIQUE_ID_PARKING).get();
-		
 		String messageResult = validate(vehiculo, parqueadero);
+		
 		if( messageResult == null) {
+			
 			parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, true, parqueadero);
 			this.vehiculoRepository.save(vehiculo);
 			this.parqueaderoRepository.save(parqueadero);
 			return new RestResponse(HttpStatus.OK.value(), "El vehiculo ingreso exitosamente", vehiculo);
+			
 		}else {
-			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), messageResult);	
+			
+			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), messageResult);
+			
 		}
 		
 	}
-
-    @Override
-    public boolean validarCantidadCarros(int cantidadCarrosActual, int topeCarros) {
-        return (cantidadCarrosActual + 1) <= topeCarros;
-    }
-
-    @Override
-    public boolean validarCantidadMotos(int cantidadMotosActual, int topeMotos) {
-        return (cantidadMotosActual + 1) <= topeMotos;
-    }
 
     @Override
     public boolean validarPlaca(String placa, long fechaIngreso) {
@@ -138,6 +132,7 @@ public class VigilanteImpl implements Vigilante {
     
     }
 
+    @Override
 	public Parqueadero actualizarParqueadero(boolean isCar,boolean ingresaVehiculo, Parqueadero parqueadero) {
 		if(isCar) {
 			if(ingresaVehiculo) {
@@ -155,7 +150,8 @@ public class VigilanteImpl implements Vigilante {
 		return parqueadero;
 	}
 	
-	public Registro calcularCobro(Vehiculo vehiculo, Parqueadero parqueadero) {
+	@Override
+	public Registro crearRegistro(Vehiculo vehiculo, Parqueadero parqueadero) {
         Registro registro = new Registro(vehiculo.getPlaca(), vehiculo.getFechaIngreso(), vehiculo.getCilindraje());
         registro.setFechaSalida(Calendar.getInstance().getTimeInMillis());
         long tiempoParqueadero = calcularTiempoVehiculoParqueadero(vehiculo.getFechaIngreso(), registro.getFechaSalida());
@@ -166,23 +162,14 @@ public class VigilanteImpl implements Vigilante {
         return registro;
     }
 	
-	String validate(Vehiculo vehiculo, Parqueadero parqueadero) {
-		
-		if(!validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso())) {
-			return "La placa que esta intentando ingresar no es valida";
-		}else if (this.vehiculoRepository.findByPlaca(vehiculo.getPlaca()).isPresent()) {
-			return "Existe un vehiculo con la misma placa dentro del parqueadero";
-		}else if (!validarCupo(vehiculo, parqueadero)){
-			return "No hay cupo para el vehiculo. Intente mas tarde por favor";
-		}
-		return null;
-	}
 	
-	public boolean validarCupo(Vehiculo vehiculo, Parqueadero parqueadero) {
-		if (vehiculo.getCilindraje() == 0) {
-			return validarCantidadCarros(parqueadero.getCantidadActualCarro(), parqueadero.getTopeCarros());
+	
+	@Override
+	public boolean validarCupo(boolean isCar, Parqueadero parqueadero) {
+		if (isCar) {
+			return (parqueadero.getCantidadActualCarro() + 1) <= parqueadero.getTopeCarros();
 		}else {
-			return validarCantidadMotos(parqueadero.getCantidadActualMoto(), parqueadero.getTopeMotos());
+			return (parqueadero.getCantidadActualMoto() + 1) <= parqueadero.getTopeMotos();
 		}
 	}
 
@@ -197,13 +184,11 @@ public class VigilanteImpl implements Vigilante {
 				
 				Parqueadero parqueadero = this.parqueaderoRepository.findById(UNIQUE_ID_PARKING).get();
 				Vehiculo vehiculo = optionalVehicle.get();
-				Registro registro = calcularCobro(vehiculo, parqueadero);
+				Registro registro = crearRegistro(vehiculo, parqueadero);
 				
-				parqueadero = actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero);
 				this.vehiculoRepository.deleteById(vehiculo.getId());
-				vehiculo.setId(null);
 				this.registroRepository.save(registro);
-				this.parqueaderoRepository.save(parqueadero);
+				this.parqueaderoRepository.save(actualizarParqueadero(vehiculo.getCilindraje() == 0, false, parqueadero));
 				return new RestResponse(HttpStatus.OK.value(), "El vehiculo salio exitosamente", registro);
 				
 			}else {
@@ -215,6 +200,19 @@ public class VigilanteImpl implements Vigilante {
 		}else {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Error en el vehiculo seleccionado");	
 		}
+	}
+
+	@Override
+	public String validate(Vehiculo vehiculo, Parqueadero parqueadero) {
+		
+		if(!validarPlaca(vehiculo.getPlaca(), vehiculo.getFechaIngreso())) {
+			return "La placa que esta intentando ingresar no es valida";
+		}else if (this.vehiculoRepository.findByPlaca(vehiculo.getPlaca()).isPresent()) {
+			return "Existe un vehiculo con la misma placa dentro del parqueadero";
+		}else if (!validarCupo(vehiculo.getCilindraje() == 0, parqueadero)){
+			return "No hay cupo para el vehiculo. Intente mas tarde por favor";
+		}
+		return null;
 	}
     
 }

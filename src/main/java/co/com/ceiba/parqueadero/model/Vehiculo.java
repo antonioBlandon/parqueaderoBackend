@@ -35,10 +35,6 @@ public class Vehiculo extends ParentEntity {
 		return cilindraje;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getPlaca() {
 		return placa;
 	}
@@ -47,16 +43,8 @@ public class Vehiculo extends ParentEntity {
 		return fechaIngreso;
 	}
 
-	public void setPlaca(String placa) {
-		this.placa = placa;
-	}
-
 	public void setFechaIngreso(Long fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
-	}
-
-	public void setCilindraje(int cilindraje) {
-		this.cilindraje = cilindraje;
 	}
     
 }
