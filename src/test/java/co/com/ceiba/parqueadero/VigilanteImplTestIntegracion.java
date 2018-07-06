@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.com.ceiba.parqueadero.domain.Vigilante;
@@ -15,6 +16,7 @@ import co.com.ceiba.parqueadero.model.Parqueadero;
 import co.com.ceiba.parqueadero.model.Vehiculo;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
 @DataJpaTest
 public class VigilanteImplTestIntegracion {
 	
