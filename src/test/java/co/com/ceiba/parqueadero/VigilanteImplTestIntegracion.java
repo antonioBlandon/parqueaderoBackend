@@ -32,15 +32,4 @@ public class VigilanteImplTestIntegracion {
     	Assert.assertEquals("La placa que esta intentando ingresar no es valida", message);
     }
     
-    @Test
-    public void testValidatePlacaExistente() {
-    	//Arrange
-    	Parqueadero parqueadero = aParking().build();
-    	Vehiculo vehiculo = aVehicle().withPlacaWithoutAinit("RTD234").build();
-    	//Act
-    	String message = vigilante.validate(vehiculo, parqueadero);
-    	//Assert
-    	Assert.assertEquals("Existe un vehiculo con la misma placa dentro del parqueadero", message);
-    }
-	
 }
